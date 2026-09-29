@@ -34,13 +34,12 @@ public class AdminAnalyticsService {
         peakMap.put("SAT", 0L);
         peakMap.put("SUN", 0L);
 
-        var reservations = reservationRepository.findAll();
+        // Fetch only startTime instead of loading complete Reservation entities
+        var reservationStartTimes = reservationRepository.findAllReservationStartTimes();
 
-        for (var r : reservations) {
-            if (r.getStartTime() != null) {
-                String day = r.getStartTime().getDayOfWeek().name().substring(0, 3);
-                peakMap.put(day, peakMap.get(day) + 1);
-            }
+        for (var startTime : reservationStartTimes) {
+            String day = startTime.getDayOfWeek().name().substring(0, 3);
+            peakMap.put(day, peakMap.get(day) + 1);
         }
 
         List<Map<String, Object>> weeklyPeakHours = new ArrayList<>();
