@@ -71,7 +71,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     	    WHERE r.status = 'CONFIRMED'
     	""")
     	double calculateOccupancyRate();
-
+    // Fetch only reservation start times for dashboard analytics
+    @Query("SELECT r.startTime FROM Reservation r WHERE r.startTime IS NOT NULL")
+    List<LocalDateTime> findAllReservationStartTimes();
   
 
 }
