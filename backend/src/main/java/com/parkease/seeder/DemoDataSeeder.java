@@ -41,6 +41,7 @@ public class DemoDataSeeder implements CommandLineRunner {
     private final ParkingZoneRepository parkingZoneRepository;
     private final ParkingSlotRepository parkingSlotRepository;
     private final ReservationRepository reservationRepository;
+    private final VehicleRepository vehicleRepository;
     private final BasePriceRepository basePriceRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -56,6 +57,7 @@ public class DemoDataSeeder implements CommandLineRunner {
 
         try {
             // Delete in order to avoid FK constraints
+            vehicleRepository.deleteAllInBatch();
             reservationRepository.deleteAllInBatch();
             parkingSlotRepository.deleteAllInBatch();
             parkingZoneRepository.deleteAllInBatch();
@@ -264,7 +266,7 @@ public class DemoDataSeeder implements CommandLineRunner {
         reservation.setEndTime(endTime);
 
         // Random status
-        String[] statuses = { "CONFIRMED", "COMPLETED", "CANCELLED" };
+        String[] statuses = { "CONFIRMED", "CANCELLED", "EXPIRED" };
         Reservation.ReservationStatus status = Reservation.ReservationStatus.valueOf(
                 statuses[ThreadLocalRandom.current().nextInt(statuses.length)]);
         reservation.setStatus(status);
